@@ -11,6 +11,18 @@ const app = express();
 
 app.use(bodyParser.json());
 
+app.use((req,res,next) => {
+    res.setHeader('Access-Control-Allow-Origin', '*');
+    res.setHeader('Access-Control-ALlow-Methods', 'POST,GET,OPTIONS');
+    res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization');
+
+    if(req.method === 'OPTIONS'){
+        return res.sendStatus(200);
+    }
+
+    next();
+})
+
 app.use(isAuth);
 
 app.use('/graphql', graphqlHttp({
@@ -22,7 +34,7 @@ app.use('/graphql', graphqlHttp({
 
 mongoose.connect(`mongodb+srv://admin:bKen847TA0fc54lM@cluster1.jme3x.mongodb.net/events-react-dev?retryWrites=true&w=majority`)
     .then(() => {
-        app.listen(3000);
+        app.listen(8000);
     })
     .catch(err => {
         console.log(err)
