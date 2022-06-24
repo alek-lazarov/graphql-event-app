@@ -1,9 +1,13 @@
 import React, { Component} from 'react';
 import "./Auth.css";
+import "../index.css";
+import AuthContext from '../context/auth-context';
 class AuthPage extends Component {
     state = {
         isLogin: true
-    }
+    };
+
+    static contextType = AuthContext;
 
     constructor(props) {
         super(props);
@@ -68,6 +72,9 @@ class AuthPage extends Component {
             return res.json();
         })
         .then(resData => {
+            if(this.state.isLogin){
+                this.context.login(resData.data.login.token, resData.data.login.userId, resData.data.login.tokenExpiration);
+            }
             console.log(resData);
         })
         .catch(err => {
@@ -87,8 +94,8 @@ class AuthPage extends Component {
                 <input type="password" id="password" ref={this.passwordEl}></input>
             </div>
             <div className='form-actions'>
-                <button type='submit'>Submit</button>
-                <button type='button' onClick={this.switchModeHandler}>Switch to {this.state.isLogin ? "Signup" : "Login"}</button>
+                <button type='submit' className='btn'>Submit</button>
+                <button type='button' className='btn' onClick={this.switchModeHandler}>Switch to {this.state.isLogin ? "Signup" : "Login"}</button>
             </div>
         </form>
         
